@@ -1,0 +1,10 @@
+node_modules
+dist
+.DS_Store
+*.local
+*.tsbuildinfo
+.model-api-settings.json
+.model-api-settings.tmp.json
+release/
+vite.config.js
+vite.config.d.ts

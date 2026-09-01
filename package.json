@@ -1,0 +1,39 @@
+{
+  "name": "model-evaluation-workbench",
+  "private": true,
+  "version": "0.2.4",
+  "description": "面向提示词搭建、多模型对比、对话测试与 Excel 批量评测的本地 AI 工作站。",
+  "author": "Jaimo-so",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jaimo-so/model-evaluation-workbench.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Jaimo-so/model-evaluation-workbench/issues"
+  },
+  "homepage": "https://github.com/Jaimo-so/model-evaluation-workbench#readme",
+  "engines": {
+    "node": ">=20.12"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "node server.mjs",
+    "build": "tsc -b && vite build",
+    "app:mac": "zsh scripts/build-macos-app.sh",
+    "preview": "vite preview --host 0.0.0.0",
+    "check": "tsc -b"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "typescript": "latest",
+    "vite": "latest",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
+  },
+  "devDependencies": {
+    "@types/react": "latest",
+    "@types/react-dom": "latest"
+  }
+}
