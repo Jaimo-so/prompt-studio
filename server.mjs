@@ -336,7 +336,7 @@ async function serveFrontend(req, res, pathname) {
 const server = createHttpServer(async (req, res) => {
   try {
     const url = new URL(req.url || '/', `http://${req.headers.host || 'localhost'}`)
-    if (req.method === 'GET' && url.pathname === '/api/health') return json(res, 200, { ok: true, name: 'model-evaluation-workbench' })
+    if (req.method === 'GET' && url.pathname === '/api/health') return json(res, 200, { ok: true, name: 'prompt-studio' })
     if (req.method === 'GET' && url.pathname === '/api/models') return json(res, 200, await publicCatalog(url.searchParams.get('refresh') === '1'))
     if (req.method === 'GET' && url.pathname === '/api/provider-settings') return json(res, 200, { providers: (await providerSettings()).map(publicSetting) })
     if (req.method === 'PUT' && url.pathname === '/api/provider-settings') { const provider = await upsertSetting(await readJson(req)); const catalog = await publicCatalog(true); return json(res, 200, { provider: publicSetting(provider), ...catalog }) }
@@ -367,6 +367,6 @@ if (Number.isInteger(parentPid) && parentPid > 1) {
 
 server.listen(port, host, async () => {
   const catalog = await publicCatalog()
-  console.log(`Model Evaluation Workbench: http://localhost:${port}`)
+  console.log(`Prompt Studio: http://localhost:${port}`)
   console.log(`Available models: ${catalog.models.filter((item) => item.available).length}/${catalog.models.length}`)
 })

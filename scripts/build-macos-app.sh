@@ -3,7 +3,7 @@ set -euo pipefail
 
 SCRIPT_DIRECTORY="${0:A:h}"
 PROJECT_ROOT="${SCRIPT_DIRECTORY:h}"
-APP_NAME="模型评测工作站"
+APP_NAME="Prompt Studio"
 RELEASE_DIRECTORY="$PROJECT_ROOT/release"
 APP_DIRECTORY="$RELEASE_DIRECTORY/$APP_NAME.app"
 CONTENTS_DIRECTORY="$APP_DIRECTORY/Contents"
@@ -20,8 +20,8 @@ rm -rf "$APP_DIRECTORY"
 mkdir -p "$MACOS_DIRECTORY" "$RESOURCES_DIRECTORY"
 
 /usr/bin/clang -O2 -fobjc-arc -framework Cocoa -framework UniformTypeIdentifiers -framework WebKit \
-  "$PROJECT_ROOT/packaging/macos/ModelEvaluationWorkbenchApp.m" \
-  -o "$MACOS_DIRECTORY/ModelEvaluationWorkbench"
+  "$PROJECT_ROOT/packaging/macos/PromptStudioApp.m" \
+  -o "$MACOS_DIRECTORY/PromptStudio"
 
 /usr/bin/clang -O2 -fobjc-arc -framework AppKit \
   "$PROJECT_ROOT/packaging/macos/AppIconGenerator.m" \
@@ -105,7 +105,7 @@ done
 cp "$PROJECT_ROOT/server.mjs" "$RESOURCES_DIRECTORY/server.mjs"
 cp -R "$PROJECT_ROOT/dist" "$RESOURCES_DIRECTORY/dist"
 
-chmod 755 "$MACOS_DIRECTORY/ModelEvaluationWorkbench" "$RESOURCES_DIRECTORY/node"
+chmod 755 "$MACOS_DIRECTORY/PromptStudio" "$RESOURCES_DIRECTORY/node"
 for RUNTIME_BINARY in "$RUNTIME_BINARIES[@]"; do
   /usr/bin/codesign --force --sign - "$RUNTIME_BINARY"
 done

@@ -1,12 +1,12 @@
-# 模型评测工作站
+# Prompt Studio
 
-统一的提示词工程、模型评测和模型测试工作站。三个模块共享系统提示词、模型目录、供应商连接状态和真实模型 API 服务。
+Prompt Studio 是统一的提示词工程、模型评测和模型测试工作站。三个模块共享系统提示词、模型目录、供应商连接状态和真实模型 API 服务。
 
-![模型评测工作站的系统提示词搭建界面](docs/screenshots/prompt-builder.png)
+![Prompt Studio 的系统提示词搭建界面](docs/screenshots/prompt-builder.png)
 
 ## 为什么做这个项目
 
-提示词搭建、对话测试和模型对比通常散落在不同工具中，难以保证实验条件一致。模型评测工作站把系统提示词作为共享控制变量，让提示词编辑、真实 API 对话、1–3 个模型并排比较和 Excel 批量评测在同一个本地工作流中完成。
+提示词搭建、对话测试和模型对比通常散落在不同工具中，难以保证实验条件一致。Prompt Studio 把系统提示词作为共享控制变量，让提示词编辑、真实 API 对话、1–3 个模型并排比较和 Excel 批量评测在同一个本地工作流中完成。
 
 ## 工作站模块
 
@@ -117,8 +117,8 @@ DEEPSEEK_API_KEY=
 环境要求：Node.js 20.12 或更高版本，以及 npm。
 
 ```bash
-git clone https://github.com/Jaimo-so/model-evaluation-workbench.git
-cd model-evaluation-workbench
+git clone https://github.com/Jaimo-so/prompt-studio.git
+cd prompt-studio
 npm install
 npm run dev
 ```
@@ -152,7 +152,7 @@ npm run check
 npm run app:mac
 ```
 
-构建完成后，打开 `release/模型评测工作站.app` 即可使用。应用会在独立窗口中启动工作站，并在退出时关闭后台本地服务。应用内置 Node 运行时和生产构建，不依赖全局安装的 Node。首次启动时，现有 API 配置会迁移到 `~/Library/Application Support/模型评测工作站/`，文件权限限制为仅当前用户可读写；密钥不会被打进应用包。
+构建完成后，打开 `release/Prompt Studio.app` 即可使用。应用会在独立窗口中启动工作站，并在退出时关闭后台本地服务。应用内置 Node 运行时和生产构建，不依赖全局安装的 Node。首次启动时，现有 API 配置会迁移到 `~/Library/Application Support/Prompt Studio/`，文件权限限制为仅当前用户可读写；旧版 `~/Library/Application Support/模型评测工作站/` 中的配置也会自动迁移，密钥不会被打进应用包。
 
 ## 内置默认模型
 

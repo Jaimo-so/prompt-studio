@@ -1,5 +1,5 @@
 {
-  "name": "model-evaluation-workbench",
+  "name": "prompt-studio",
   "private": true,
   "version": "0.2.4",
   "description": "面向提示词搭建、多模型对比、对话测试与 Excel 批量评测的本地 AI 工作站。",
@@ -7,12 +7,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Jaimo-so/model-evaluation-workbench.git"
+    "url": "git+https://github.com/Jaimo-so/prompt-studio.git"
   },
   "bugs": {
-    "url": "https://github.com/Jaimo-so/model-evaluation-workbench/issues"
+    "url": "https://github.com/Jaimo-so/prompt-studio/issues"
   },
-  "homepage": "https://github.com/Jaimo-so/model-evaluation-workbench#readme",
+  "homepage": "https://github.com/Jaimo-so/prompt-studio#readme",
   "engines": {
     "node": ">=20.12"
   },

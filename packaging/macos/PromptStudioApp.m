@@ -46,11 +46,11 @@ static NSString *const HealthURL = @"http://127.0.0.1:17329/api/health";
                                                styleMask:NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable | NSWindowStyleMaskResizable | NSWindowStyleMaskFullSizeContentView
                                                  backing:NSBackingStoreBuffered
                                                    defer:NO];
-    self.window.title = @"模型评测工作站";
+    self.window.title = @"Prompt Studio";
     self.window.minSize = NSMakeSize(1040, 680);
     self.window.contentView = self.webView;
     self.window.delegate = self;
-    [self.window setFrameAutosaveName:@"ModelEvaluationWorkbenchMainWindow"];
+    [self.window setFrameAutosaveName:@"PromptStudioMainWindow"];
     [self.window center];
     [self.window makeKeyAndOrderFront:nil];
 }
@@ -59,14 +59,14 @@ static NSString *const HealthURL = @"http://127.0.0.1:17329/api/health";
     NSMenu *mainMenu = [[NSMenu alloc] init];
     NSMenuItem *appMenuItem = [[NSMenuItem alloc] init];
     NSMenu *appMenu = [[NSMenu alloc] init];
-    [appMenu addItemWithTitle:@"关于模型评测工作站" action:@selector(orderFrontStandardAboutPanel:) keyEquivalent:@""];
+    [appMenu addItemWithTitle:@"关于 Prompt Studio" action:@selector(orderFrontStandardAboutPanel:) keyEquivalent:@""];
     [appMenu addItem:NSMenuItem.separatorItem];
-    [appMenu addItemWithTitle:@"隐藏模型评测工作站" action:@selector(hide:) keyEquivalent:@"h"];
+    [appMenu addItemWithTitle:@"隐藏 Prompt Studio" action:@selector(hide:) keyEquivalent:@"h"];
     NSMenuItem *hideOthers = [appMenu addItemWithTitle:@"隐藏其他应用" action:@selector(hideOtherApplications:) keyEquivalent:@"h"];
     hideOthers.keyEquivalentModifierMask = NSEventModifierFlagCommand | NSEventModifierFlagOption;
     [appMenu addItemWithTitle:@"显示全部" action:@selector(unhideAllApplications:) keyEquivalent:@""];
     [appMenu addItem:NSMenuItem.separatorItem];
-    [appMenu addItemWithTitle:@"退出模型评测工作站" action:@selector(terminate:) keyEquivalent:@"q"];
+    [appMenu addItemWithTitle:@"退出 Prompt Studio" action:@selector(terminate:) keyEquivalent:@"q"];
     appMenuItem.submenu = appMenu;
     [mainMenu addItem:appMenuItem];
 
@@ -93,7 +93,7 @@ static NSString *const HealthURL = @"http://127.0.0.1:17329/api/health";
 }
 
 - (void)showLoadingPage {
-    NSString *html = @"<!doctype html><html lang='zh-CN'><meta charset='utf-8'><style>:root{color-scheme:light}*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f4f5f7;color:#172033;font:14px -apple-system,BlinkMacSystemFont,sans-serif}.card{display:grid;justify-items:center;gap:16px}.mark{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;background:#315eea;color:white;box-shadow:0 14px 30px rgba(49,94,234,.24);font-size:28px}.spinner{width:20px;height:20px;border:2px solid #d9dfed;border-top-color:#315eea;border-radius:50%;animation:spin .8s linear infinite}p{margin:0;color:#6b7383}@keyframes spin{to{transform:rotate(360deg)}}</style><body><div class='card'><div class='mark'>✦</div><strong>模型评测工作站</strong><div class='spinner'></div><p>正在启动本地服务…</p></div></body></html>";
+    NSString *html = @"<!doctype html><html lang='zh-CN'><meta charset='utf-8'><style>:root{color-scheme:light}*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f4f5f7;color:#172033;font:14px -apple-system,BlinkMacSystemFont,sans-serif}.card{display:grid;justify-items:center;gap:16px}.mark{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;background:#315eea;color:white;box-shadow:0 14px 30px rgba(49,94,234,.24);font-size:28px}.spinner{width:20px;height:20px;border:2px solid #d9dfed;border-top-color:#315eea;border-radius:50%;animation:spin .8s linear infinite}p{margin:0;color:#6b7383}@keyframes spin{to{transform:rotate(360deg)}}</style><body><div class='card'><div class='mark'>✦</div><strong>Prompt Studio</strong><div class='spinner'></div><p>正在启动本地服务…</p></div></body></html>";
     [self.webView loadHTMLString:html baseURL:nil];
 }
 
@@ -107,7 +107,8 @@ static NSString *const HealthURL = @"http://127.0.0.1:17329/api/health";
 
     NSFileManager *fileManager = NSFileManager.defaultManager;
     NSURL *applicationSupport = [[fileManager URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask] firstObject];
-    NSURL *dataRootURL = [applicationSupport URLByAppendingPathComponent:@"模型评测工作站" isDirectory:YES];
+    NSURL *dataRootURL = [applicationSupport URLByAppendingPathComponent:@"Prompt Studio" isDirectory:YES];
+    NSURL *legacyDataRootURL = [applicationSupport URLByAppendingPathComponent:@"模型评测工作站" isDirectory:YES];
     NSError *storageError = nil;
     if (![fileManager createDirectoryAtURL:dataRootURL withIntermediateDirectories:YES attributes:@{NSFilePosixPermissions: @0700} error:&storageError]) {
         [self showStartupError:[NSString stringWithFormat:@"无法创建应用数据目录：%@", storageError.localizedDescription]];
@@ -115,7 +116,9 @@ static NSString *const HealthURL = @"http://127.0.0.1:17329/api/health";
     }
 
     for (NSString *fileName in @[@".model-api-settings.json", @".env", @".env.local", @".env.production", @".env.production.local"]) {
-        NSURL *source = [NSURL fileURLWithPath:[migrationRoot stringByAppendingPathComponent:fileName]];
+        NSURL *legacySource = [legacyDataRootURL URLByAppendingPathComponent:fileName];
+        NSURL *projectSource = [NSURL fileURLWithPath:[migrationRoot stringByAppendingPathComponent:fileName]];
+        NSURL *source = [fileManager fileExistsAtPath:legacySource.path] ? legacySource : projectSource;
         NSURL *destination = [dataRootURL URLByAppendingPathComponent:fileName];
         if (![fileManager fileExistsAtPath:destination.path] && [fileManager fileExistsAtPath:source.path]) {
             if (![fileManager copyItemAtURL:source toURL:destination error:&storageError]) {
@@ -186,7 +189,7 @@ static NSString *const HealthURL = @"http://127.0.0.1:17329/api/health";
         [[NSURLSession.sharedSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
             NSHTTPURLResponse *http = (NSHTTPURLResponse *)response;
             NSDictionary *json = data ? [NSJSONSerialization JSONObjectWithData:data options:0 error:nil] : nil;
-            if (http.statusCode != 200 || ![json[@"name"] isEqualToString:@"model-evaluation-workbench"]) return;
+            if (http.statusCode != 200 || ![json[@"name"] isEqualToString:@"prompt-studio"]) return;
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.healthTimer invalidate];
                 [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:WorkbenchURL]]];
@@ -202,7 +205,7 @@ static NSString *const HealthURL = @"http://127.0.0.1:17329/api/health";
 - (void)showStartupError:(NSString *)message {
     dispatch_async(dispatch_get_main_queue(), ^{
         NSString *escaped = [[[[message stringByReplacingOccurrencesOfString:@"&" withString:@"&amp;"] stringByReplacingOccurrencesOfString:@"<" withString:@"&lt;"] stringByReplacingOccurrencesOfString:@">" withString:@"&gt;"] stringByReplacingOccurrencesOfString:@"\n" withString:@"<br>"];
-        NSString *html = [NSString stringWithFormat:@"<!doctype html><html lang='zh-CN'><meta charset='utf-8'><style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f4f5f7;color:#172033;font:14px -apple-system,BlinkMacSystemFont,sans-serif}.card{max-width:680px;padding:28px;border:1px solid #dfe3ec;border-radius:16px;background:white;box-shadow:0 14px 34px rgba(32,44,71,.08)}h1{margin:0 0 12px;font-size:18px}p{margin:0;color:#596274;line-height:1.7}</style><body><div class='card'><h1>工作站未能启动</h1><p>%@</p></div></body></html>", escaped];
+        NSString *html = [NSString stringWithFormat:@"<!doctype html><html lang='zh-CN'><meta charset='utf-8'><style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f4f5f7;color:#172033;font:14px -apple-system,BlinkMacSystemFont,sans-serif}.card{max-width:680px;padding:28px;border:1px solid #dfe3ec;border-radius:16px;background:white;box-shadow:0 14px 34px rgba(32,44,71,.08)}h1{margin:0 0 12px;font-size:18px}p{margin:0;color:#596274;line-height:1.7}</style><body><div class='card'><h1>Prompt Studio 未能启动</h1><p>%@</p></div></body></html>", escaped];
         [self.webView loadHTMLString:html baseURL:nil];
     });
 }

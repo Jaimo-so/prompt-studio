@@ -5,17 +5,17 @@
   <key>CFBundleDevelopmentRegion</key>
   <string>zh_CN</string>
   <key>CFBundleDisplayName</key>
-  <string>模型评测工作站</string>
+  <string>Prompt Studio</string>
   <key>CFBundleExecutable</key>
-  <string>ModelEvaluationWorkbench</string>
+  <string>PromptStudio</string>
   <key>CFBundleIconFile</key>
   <string>AppIcon</string>
   <key>CFBundleIdentifier</key>
-  <string>local.model-evaluation-workbench</string>
+  <string>com.jaimo.prompt-studio</string>
   <key>CFBundleInfoDictionaryVersion</key>
   <string>6.0</string>
   <key>CFBundleName</key>
-  <string>模型评测工作站</string>
+  <string>Prompt Studio</string>
   <key>CFBundlePackageType</key>
   <string>APPL</string>
   <key>CFBundleShortVersionString</key>
